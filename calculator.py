@@ -6,7 +6,7 @@ def calculate_pre_budget_new_regime_tax(salary):
 
     standard_deduction = 75000
     tax = 0
-    remaining = salary
+    remaining = salary - standard_deduction
 
     slabs = [
         (300000, 0.00),
@@ -19,7 +19,7 @@ def calculate_pre_budget_new_regime_tax(salary):
 
     for slab, rate in slabs:
         if remaining > 0:
-            taxable_amount = min(remaining, slab) - standard_deduction
+            taxable_amount = min(remaining, slab)
             tax += taxable_amount * rate
             remaining -= taxable_amount
     
@@ -31,7 +31,7 @@ def calculate_pre_budget_old_regime_tax(salary):
 
     standard_deduction = 50000
     tax = 0
-    remaining = salary
+    remaining = salary - standard_deduction
 
     slabs = [
         (250000, 0.00),
@@ -42,7 +42,7 @@ def calculate_pre_budget_old_regime_tax(salary):
 
     for slab, rate in slabs:
         if remaining > 0:
-            taxable_amount = min(remaining, slab) - standard_deduction
+            taxable_amount = min(remaining, slab)
             tax += taxable_amount * rate
             remaining -= taxable_amount
     
@@ -54,7 +54,7 @@ def calculate_post_budget_new_tax(salary):
 
     standard_deduction = 75000
     tax = 0
-    remaining = salary
+    remaining = salary - standard_deduction
 
     slabs = [
         (400000, 0.00),
@@ -68,7 +68,7 @@ def calculate_post_budget_new_tax(salary):
 
     for slab, rate in slabs:
         if remaining > 0:
-            taxable_amount = min(remaining, slab) - standard_deduction
+            taxable_amount = min(remaining, slab)  # Only take the minimum available
             tax += taxable_amount * rate
             remaining -= taxable_amount
     
