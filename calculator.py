@@ -1,33 +1,58 @@
 import streamlit as st
 
-def calculate_old_tax(salary):
-    if salary <= 700000:
+def calculate_pre_budget_new_regime_tax(salary):
+    if salary <= 775000:
         return 0
 
+    standard_deduction = 75000
     tax = 0
     remaining = salary
 
     slabs = [
         (300000, 0.00),
-        (100000, 0.05),
-        (600000, 0.10),
-        (200000, 0.15),
+        (300000, 0.05),
+        (300000, 0.10),
+        (300000, 0.15),
         (300000, 0.20),
         (float('inf'), 0.30)
     ]
 
     for slab, rate in slabs:
         if remaining > 0:
-            taxable_amount = min(remaining, slab)
+            taxable_amount = min(remaining, slab) - standard_deduction
             tax += taxable_amount * rate
             remaining -= taxable_amount
     
     return tax
 
-def calculate_new_tax(salary):
-    if salary <= 1200000:
+def calculate_pre_budget_old_regime_tax(salary):
+    if salary <= 500000:
         return 0
 
+    standard_deduction = 50000
+    tax = 0
+    remaining = salary
+
+    slabs = [
+        (250000, 0.00),
+        (250000, 0.05),
+        (500000, 0.20),
+        (float('inf'), 0.30)
+    ]
+
+    for slab, rate in slabs:
+        if remaining > 0:
+            taxable_amount = min(remaining, slab) - standard_deduction
+            tax += taxable_amount * rate
+            remaining -= taxable_amount
+    
+    return tax
+
+def calculate_post_budget_new_tax(salary):
+    if salary <= 1275000:
+        return 0
+
+    standard_deduction = 75000
     tax = 0
     remaining = salary
 
@@ -43,7 +68,7 @@ def calculate_new_tax(salary):
 
     for slab, rate in slabs:
         if remaining > 0:
-            taxable_amount = min(remaining, slab)
+            taxable_amount = min(remaining, slab) - standard_deduction
             tax += taxable_amount * rate
             remaining -= taxable_amount
     
@@ -83,7 +108,17 @@ def set_branding():
                 color: #16A34A;
             }
                 
-            .result-box-old {
+            .result-box-pre-old {
+                background-color: #ffffc5;
+                padding: 20px;
+                border-radius: 10px;
+                text-align: center;
+                font-size: 1.3rem;
+                font-weight: bold;
+                color: #ba8e23;
+            }
+            
+            .result-box-pre-new {
                 background-color: #EFF6FF;
                 padding: 20px;
                 border-radius: 10px;
@@ -92,7 +127,7 @@ def set_branding():
                 font-weight: bold;
                 color: #2563EB;
             }
-            
+
             .result-box-new {
                 background-color: #F0FDF4;
                 padding: 20px;
@@ -136,26 +171,57 @@ if st.button("Calculate"):
 salary = st.session_state.salary
 
 if salary > 0:
-    old_tax = calculate_old_tax(salary)
-    new_tax = calculate_new_tax(salary)
+    pre_budget_new_regime_tax = calculate_pre_budget_new_regime_tax(salary)
+    pre_budget_old_regime_tax = calculate_pre_budget_old_regime_tax(salary)
+    post_budget_new_tax = calculate_post_budget_new_tax(salary)
     
-    old_effective_rate = (old_tax / salary) * 100
-    new_effective_rate = (new_tax / salary) * 100
+    pre_budget_new_regime_effective_rate = (pre_budget_new_regime_tax / salary) * 100
+    pre_budget_old_regime_effective_rate = (pre_budget_old_regime_tax / salary) * 100
+    post_budget_new_effective_rate = (post_budget_new_tax / salary) * 100
     
-    st.markdown("<h2 class='sub-title'>Old Tax Calculation as per 2024</h2>", unsafe_allow_html=True)
-    st.markdown(f"<div class='result-box-old'>{format_currency(old_tax)}</div>", unsafe_allow_html=True)
-    st.markdown(f"<p class='highlight-old'>Effective Rate: {old_effective_rate:.1f}%</p>", unsafe_allow_html=True)
+    st.markdown("<h2 class='sub-title'>Pre-Budget Old Regime Tax Calculation as per 2024</h2>", unsafe_allow_html=True)
+    pre_budget_old_regime_tax_post_cess = pre_budget_old_regime_tax*1.04
+    st.markdown(f"<div class='result-box-pre-old'>{format_currency(pre_budget_old_regime_tax_post_cess)}</div>", unsafe_allow_html=True)
+    st.warning("Shown tax includes 4 percent CESS")
+    pre_budget_old_regime_tax_in_hand_per_month_salary = int((salary - pre_budget_old_regime_tax_post_cess)/12)
+    st.markdown(f"<p class='highlight-old'>Effective Rate: {pre_budget_old_regime_effective_rate:.1f}%<br>In-Hand Per Month Salary: {pre_budget_old_regime_tax_in_hand_per_month_salary}</p>", unsafe_allow_html=True)
+    
+    st.markdown("<h2 class='sub-title'>Pre-Budget New Regime Tax Calculation as per 2024</h2>", unsafe_allow_html=True)
+    pre_budget_new_regime_tax_post_cess = pre_budget_new_regime_tax*1.04
+    st.markdown(f"<div class='result-box-pre-new'>{format_currency(pre_budget_new_regime_tax_post_cess)}</div>", unsafe_allow_html=True)
+    st.info("Shown tax includes 4 percent CESS")
+    pre_budget_new_regime_tax_in_hand_per_month_salary = int((salary - pre_budget_new_regime_tax_post_cess)/12)
+    st.markdown(f"<p class='highlight-old'>Effective Rate: {pre_budget_new_regime_effective_rate:.1f}%<br>In-Hand Per Month Salary: {pre_budget_new_regime_tax_in_hand_per_month_salary}</p>", unsafe_allow_html=True)
     
     st.markdown("<h2 class='sub-title'>New Tax Calculation as per 2025</h2>", unsafe_allow_html=True)
-    st.markdown(f"<div class='result-box-new'>{format_currency(new_tax)}</div>", unsafe_allow_html=True)
-    st.markdown(f"<p class='highlight-new'>Effective Rate: {new_effective_rate:.1f}%</p>", unsafe_allow_html=True)
+    post_budget_new_tax_post_cess = post_budget_new_tax*1.04
+    st.markdown(f"<div class='result-box-new'>{format_currency(post_budget_new_tax_post_cess)}</div>", unsafe_allow_html=True)
+    st.success("Shown tax includes 4 percent CESS")
+    post_budget_new_tax_in_hand_per_month_salary = int((salary - post_budget_new_tax_post_cess)/12)
+    st.markdown(f"<p class='highlight-new'>Effective Rate: {post_budget_new_effective_rate:.1f}%<br>In-Hand Per Month Salary: {post_budget_new_tax_in_hand_per_month_salary}</p>", unsafe_allow_html=True)
 
-    total_savings = old_tax - new_tax
-    st.markdown(f"### Total Savings: {format_currency(total_savings)}")
+    total_savings_pre_budget_new_and_post_budget = pre_budget_new_regime_tax_post_cess - post_budget_new_tax_post_cess
+    st.info(f"### Total Savings if you were in New Regime before Budget: {format_currency(total_savings_pre_budget_new_and_post_budget)}")
+
+    total_savings_pre_budget_old_and_post_budget = pre_budget_old_regime_tax_post_cess - post_budget_new_tax_post_cess
+    st.warning(f"### Total Savings if you were in Old Regime before Budget: {format_currency(total_savings_pre_budget_old_and_post_budget)}")
     
     # Display all percentage slabs
     st.markdown("## Tax Slabs & Rates")
-    st.markdown("### Old Tax Regime")
+    st.markdown("### Pre Budget New Tax Regime")
+    old_slabs = [
+        ("0 - 3L", "0%"),
+        ("3L - 6L", "5%"),
+        ("6L - 9L", "10%"),
+        ("9L - 12L", "15%"),
+        ("12L - 15L", "20%"),
+        ("Above 15L", "30%")
+    ]
+    
+    for slab, rate in old_slabs:
+        st.markdown(f"**{slab}** : {rate}")
+
+    st.markdown("### Pre Budget Old Tax Regime")
     old_slabs = [
         ("0 - 3L", "0%"),
         ("3L - 4L", "5%"),
@@ -168,14 +234,11 @@ if salary > 0:
     for slab, rate in old_slabs:
         st.markdown(f"**{slab}** : {rate}")
     
-    st.markdown("### New Tax Regime")
+    st.markdown("### Post Budget New Tax Regime")
     new_slabs = [
-        ("0 - 4L", "0%"),
-        ("4L - 8L", "5%"),
-        ("8L - 12L", "10%"),
-        ("12L - 16L", "15%"),
-        ("16L - 20L", "20%"),
-        ("20L - 24L", "25%"),
+        ("0 - 2.5L", "0%"),
+        ("2.5L - 5L", "5%"),
+        ("5L - 10L", "20%"),
         ("Above 24L", "30%")
     ]
     
