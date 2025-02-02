@@ -202,7 +202,7 @@ if salary > 0:
     st.success("Shown tax includes 4 percent CESS")
     post_budget_new_tax_in_hand_per_month_salary = int((salary - post_budget_new_tax_post_cess)/12)
     st.markdown(f"<p class='highlight-new'>Effective Rate: {post_budget_new_effective_rate:.1f}%<br>In-Hand Per Month Salary: {post_budget_new_tax_in_hand_per_month_salary}</p>", unsafe_allow_html=True)
-    st.write("Amounts mentioned are subject to change based on additional investmemts or loans")
+    st.error("Amounts mentioned are subject to change based on additional investmemts or loans")
     total_savings_pre_budget_new_and_post_budget = pre_budget_new_regime_tax_post_cess - post_budget_new_tax_post_cess
     st.info(f"### Total Savings if you were in New Regime before Budget: {format_currency(total_savings_pre_budget_new_and_post_budget)}")
 
