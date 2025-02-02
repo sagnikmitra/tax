@@ -185,21 +185,21 @@ if salary > 0:
     st.markdown("<h2 class='sub-title'>Pre-Budget Old Regime Tax Calculation as per 2024</h2>", unsafe_allow_html=True)
     pre_budget_old_regime_tax_post_cess = pre_budget_old_regime_tax*1.04
     st.markdown(f"<div class='result-box-pre-old'>{format_currency(pre_budget_old_regime_tax_post_cess)}</div>", unsafe_allow_html=True)
-    st.warning("Shown tax includes 4 percent CESS")
+    st.warning("Shown tax is post deducing the Standard Deduction of 50000 and includes 4 percent CESS. Does not include P-Tax or other deductions. Check with your CA for exact amount.")
     pre_budget_old_regime_tax_in_hand_per_month_salary = int((salary - pre_budget_old_regime_tax_post_cess)/12)
     st.markdown(f"<p class='highlight-pre-old'>Effective Rate: {pre_budget_old_regime_effective_rate:.1f}%<br>In-Hand Per Month Salary: {pre_budget_old_regime_tax_in_hand_per_month_salary}</p>", unsafe_allow_html=True)
 
     st.markdown("<h2 class='sub-title'>Pre-Budget New Regime Tax Calculation as per 2024</h2>", unsafe_allow_html=True)
     pre_budget_new_regime_tax_post_cess = pre_budget_new_regime_tax*1.04
     st.markdown(f"<div class='result-box-pre-new'>{format_currency(pre_budget_new_regime_tax_post_cess)}</div>", unsafe_allow_html=True)
-    st.info("Shown tax includes 4 percent CESS")
+    st.info("Shown tax is post deducing the Standard Deduction of 75000 and includes 4 percent CESS. Does not include P-Tax or other deductions. Check with your CA for exact amount.")
     pre_budget_new_regime_tax_in_hand_per_month_salary = int((salary - pre_budget_new_regime_tax_post_cess)/12)
     st.markdown(f"<p class='highlight-pre-new'>Effective Rate: {pre_budget_new_regime_effective_rate:.1f}%<br>In-Hand Per Month Salary: {pre_budget_new_regime_tax_in_hand_per_month_salary}</p>", unsafe_allow_html=True)
 
     st.markdown("<h2 class='sub-title'>Post Budget New Tax Calculation as per 2025</h2>", unsafe_allow_html=True)
     post_budget_new_tax_post_cess = post_budget_new_tax*1.04
     st.markdown(f"<div class='result-box-new'>{format_currency(post_budget_new_tax_post_cess)}</div>", unsafe_allow_html=True)
-    st.success("Shown tax includes 4 percent CESS")
+    st.success("Shown tax is post deducing the Standard Deduction of 75000 and includes 4 percent CESS. Does not include P-Tax or other deductions. Check with your CA for exact amount.")
     post_budget_new_tax_in_hand_per_month_salary = int((salary - post_budget_new_tax_post_cess)/12)
     st.markdown(f"<p class='highlight-new'>Effective Rate: {post_budget_new_effective_rate:.1f}%<br>In-Hand Per Month Salary: {post_budget_new_tax_in_hand_per_month_salary}</p>", unsafe_allow_html=True)
     st.error("Amounts mentioned are subject to change based on additional investmemts or loans")
