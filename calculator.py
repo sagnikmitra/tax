@@ -123,7 +123,17 @@ st.title("💰 Tax Calculator Comparison as per Budget 2025")
 st.write("### by Sagnik Mitra")
 set_branding()
 
-salary = st.number_input("## Enter Annual Income (₹)", min_value=0, step=10000, format="%d")
+if "salary" not in st.session_state:
+    st.session_state.salary = 0
+
+# Update session state only after the button is clicked
+temp_salary = st.number_input("## Enter Annual Income Below (₹)", step=10000, min_value=0, format="%d")
+
+if st.button("Calculate"):
+    st.session_state.salary = temp_salary  # Store value only when button is clicked
+
+# Use session state for salary
+salary = st.session_state.salary
 
 if salary > 0:
     old_tax = calculate_old_tax(salary)
