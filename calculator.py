@@ -158,7 +158,7 @@ def set_branding():
         </style>
     """, unsafe_allow_html=True)
 
-st.title("💰 Tax Calculator Comparison as per Budget 2025")
+st.title("💰 Tax Calculator & Saving Comparison as per Budget 2025")
 
 st.write("### by Sagnik Mitra")
 set_branding()
