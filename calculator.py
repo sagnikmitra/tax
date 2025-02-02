@@ -77,7 +77,6 @@ def calculate_post_budget_new_tax(salary):
 def format_currency(amount):
     return f'₹{amount:,.0f}'
 
-# Set up branding
 def set_branding():
     st.markdown("""
         <style>
@@ -167,13 +166,11 @@ set_branding()
 if "salary" not in st.session_state:
     st.session_state.salary = 0
 
-# Update session state only after the button is clicked
 temp_salary = st.number_input("## Enter Annual Income Below (₹)", step=10000, min_value=0, format="%d")
 
 if st.button("Calculate"):
-    st.session_state.salary = temp_salary  # Store value only when button is clicked
+    st.session_state.salary = temp_salary 
 
-# Use session state for salary
 salary = st.session_state.salary
 
 if salary > 0:
@@ -212,7 +209,6 @@ if salary > 0:
     total_savings_pre_budget_old_and_post_budget = pre_budget_old_regime_tax_post_cess - post_budget_new_tax_post_cess
     st.warning(f"### Total Savings if you were in Old Regime before Budget: {format_currency(total_savings_pre_budget_old_and_post_budget)}")
     
-    # Display all percentage slabs
     st.markdown("## Tax Slabs & Rates")
     st.markdown("### Pre Budget Old Tax Regime")
     new_slabs = [
