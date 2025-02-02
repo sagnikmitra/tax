@@ -68,7 +68,7 @@ def set_branding():
             }
             .sub-title {
                 font-size: 1.5rem;
-                color: #bdc3c7;
+                color: white;
                 text-align: center;
             }
             .highlight-old {
@@ -146,10 +146,13 @@ if salary > 0:
     st.markdown(f"<div class='result-box-old'>{format_currency(old_tax)}</div>", unsafe_allow_html=True)
     st.markdown(f"<p class='highlight-old'>Effective Rate: {old_effective_rate:.1f}%</p>", unsafe_allow_html=True)
     
-    st.markdown("<h2 class='sub-title'>New Tax Calculation as per 2025 Budget</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 class='sub-title'>New Tax Calculation as per 2025</h2>", unsafe_allow_html=True)
     st.markdown(f"<div class='result-box-new'>{format_currency(new_tax)}</div>", unsafe_allow_html=True)
     st.markdown(f"<p class='highlight-new'>Effective Rate: {new_effective_rate:.1f}%</p>", unsafe_allow_html=True)
 
+    total_savings = old_tax - new_tax
+    st.markdown(f"### Total Savings: {format_currency(total_savings)}")
+    
     # Display all percentage slabs
     st.markdown("## Tax Slabs & Rates")
     st.markdown("### Old Tax Regime")
