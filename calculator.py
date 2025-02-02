@@ -233,7 +233,7 @@ if salary > 0:
     for slab, rate in old_slabs:
         st.markdown(f"**{slab}** : {rate}")
 
-    st.markdown("### Post Budget New Tax Regime")
+    st.markdown("### Post Budget Tax Regime")
     old_slabs = [
         ("0 - 4L", "0%"),
         ("4L - 8L", "5%"),
