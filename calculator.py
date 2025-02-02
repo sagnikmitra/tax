@@ -214,6 +214,16 @@ if salary > 0:
     
     # Display all percentage slabs
     st.markdown("## Tax Slabs & Rates")
+    st.markdown("### Pre Budget Old Tax Regime")
+    new_slabs = [
+        ("0 - 2.5L", "0%"),
+        ("2.5L - 5L", "5%"),
+        ("5L - 10L", "20%"),
+        ("Above 24L", "30%")
+    ]
+    
+    for slab, rate in new_slabs:
+        st.markdown(f"**{slab}** : {rate}")
     st.markdown("### Pre Budget New Tax Regime")
     old_slabs = [
         ("0 - 3L", "0%"),
@@ -227,26 +237,18 @@ if salary > 0:
     for slab, rate in old_slabs:
         st.markdown(f"**{slab}** : {rate}")
 
-    st.markdown("### Pre Budget Old Tax Regime")
+    st.markdown("### Post Budget New Tax Regime")
     old_slabs = [
-        ("0 - 3L", "0%"),
-        ("3L - 4L", "5%"),
-        ("4L - 10L", "10%"),
-        ("10L - 12L", "15%"),
-        ("12L - 15L", "20%"),
-        ("Above 15L", "30%")
+        ("0 - 4L", "0%"),
+        ("4L - 8L", "5%"),
+        ("8L - 12L", "10%"),
+        ("12L - 16L", "15%"),
+        ("16L - 20L", "20%"),
+        ("20L - 24L", "25%"),
+        ("Above 24L", "30%")
     ]
     
     for slab, rate in old_slabs:
         st.markdown(f"**{slab}** : {rate}")
     
-    st.markdown("### Post Budget New Tax Regime")
-    new_slabs = [
-        ("0 - 2.5L", "0%"),
-        ("2.5L - 5L", "5%"),
-        ("5L - 10L", "20%"),
-        ("Above 24L", "30%")
-    ]
     
-    for slab, rate in new_slabs:
-        st.markdown(f"**{slab}** : {rate}")
