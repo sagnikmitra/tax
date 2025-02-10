@@ -157,6 +157,7 @@ def set_branding():
             }
         </style>
     """, unsafe_allow_html=True)
+st.image('sagnik-design-logo-color.png', width=200)
 
 st.title("💰 Tax Calculator & Saving Comparison as per Budget 2025")
 

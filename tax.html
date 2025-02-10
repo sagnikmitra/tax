@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tax Calculator & Saving Comparison</title>
+    <style>
+        body {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            font-family: sans-serif; /* Added a default font */
+        }
+        .main-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #ecf0f1;
+            text-align: center;
+        }
+        .sub-title {
+            font-size: 1.5rem;
+            color: white;
+            text-align: center;
+            margin-top: 20px; /* Added some spacing */
+        }
+        .highlight-pre-old {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #ffcc00;
+        }
+        .highlight-pre-new {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2563EB;
+        }
+        .highlight-new {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #16A34A;
+        }
+        .result-box-pre-old {
+            background-color: #ffffc5;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ba8e23;
+            margin: 20px auto; /* Centered the box */
+            width: fit-content; /* Adjust width as needed */
+
+        }
+        .result-box-pre-new {
+            background-color: #EFF6FF;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #2563EB;
+            margin: 20px auto; /* Centered the box */
+             width: fit-content; /* Adjust width as needed */
+        }
+        .result-box-new {
+            background-color: #F0FDF4;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #16A34A;
+            margin: 20px auto; /* Centered the box */
+             width: fit-content; /* Adjust width as needed */
+        }
+        .old-regime, .new-regime {
+            padding: 10px;
+            border-radius: 5px;
+            color: #ecf0f1;
+            margin-top: 10px; /* Added spacing between regime buttons */
+
+        }
+        .old-regime {
+            background-color: #2980b9;
+        }
+        .new-regime {
+            background-color: #27ae60;
+        }
+        .slab-table { /* Added table styles */
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        .slab-table th, .slab-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .slab-table th {
+            background-color: #34495e; /* Darker header */
+            color: white;
+        }
+
+        #calculator-container {
+            width: 60%; /* Adjust as needed */
+            margin: 20px auto;
+            background-color: #34495e; /* A bit darker for contrast */
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        label {
+            display: block; /* Makes labels stack nicely */
+            margin-bottom: 5px;
+            color: white;
+        }
+
+        input[type="number"] {
+            width: calc(100% - 12px); /* Full width, accounting for padding */
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box; /* Ensures padding is included in width */
+        }
+
+        button {
+            background-color: #27ae60;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #results{
+            margin-top: 20px;
+        }
+        #results > div{
+            margin-bottom: 20px;
+        }
+        .savings-info{
+            margin-top: 20px;
+        }
+        .savings-info > div{
+            margin-bottom: 10px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1 class="main-title">💰 Tax Calculator & Saving Comparison as per Budget 2025</h1>
+    <p style="text-align: center;">by Sagnik Mitra</p>
+
+    <div id="calculator-container">
+        <label for="salary">Annual Income (₹):</label>
+        <input type="number" id="salary" step="10000" min="0">
+        <button onclick="calculateTax()">Calculate</button>
+    </div>
+
+    <div id="results"></div>
+
+    <script>
+        function calculateTax() {
+            const salary = parseFloat(document.getElementById("salary").value);
+            if (isNaN(salary) || salary < 0) {
+                alert("Please enter a valid annual income.");
+                return;
+            }
+
+            const regimes = {
+                pre_budget_old: {
+                    slabs: [(250000, 0.00), (250000, 0.05), (500000, 0.20), [Infinity, 0.30]],
+                    deduction: 50000
+                },
+                pre_budget_new: {
+                    slabs: [(300000, 0.00), (300000, 0.05), (300000, 0.10), (300000, 0.15), (300000, 0.20), [Infinity, 0.30]],
+                    deduction: 75000
+                },
+                post_budget_new: {
+                    slabs: [(400000, 0.00), (400000, 0.05), (400000, 0.10), (400000, 0.15), (400000, 0.20), (400000, 0.25), [Infinity, 0.30]],
+                    deduction: 75000
+                }
+            };
+
+            function calculateTaxAmount(salary, regime) {
+                if (salary <= regime.slabs[0][0]) {
+                    return 0;
+                }
+
+                let tax = 0;
+                let remaining = salary;
+
+                for (const [slabLimit, rate] of regime.slabs) {
+                    if (remaining > 0) {
+                        let taxableAmount = Math.min(remaining, slabLimit) - regime.deduction;
+                        tax += Math.max(0, taxableAmount) * rate;
+                        remaining -= Math.max(0, taxableAmount);
+                    }
+                }
+                return tax;
+            }
+
+            function formatCurrency(amount) {
+                return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(amount);
+            }
+
+            const resultsDiv = document.getElementById("results");
+            resultsDiv.innerHTML = ""; // Clear previous results
+
+            let resultsHTML = ""; // Accumulate HTML
+
+            for (const regimeName in regimes) {
+                const tax = calculateTaxAmount(salary, regimes[regimeName]);
+                const taxWithCess = tax * 1.04;
+                const effectiveRate = (tax / salary) * 100;
+                const inHandSalary = Math.round((salary - taxWithCess) / 12);
+
+                let regimeTitle = "";
+                let highlightClass = "";
+                let warningMessage = "";
+
+                switch (regimeName) {
+                    case "pre_budget_old":
+                        regimeTitle = "Pre-Budget Old Regime Tax Calculation as per 2024";
+                        highlightClass = "pre-old";
+                        warningMessage = "Shown tax includes 4 percent CESS";
+                        break;
+                    case "pre_budget_new":
+                        regimeTitle = "Pre-Budget New Regime Tax Calculation as per 2024";
+                        highlightClass = "pre-new";
+                        warningMessage = "Shown tax includes 4 percent CESS";
+                        break;
+                    case "post_budget_new":
+                        regimeTitle = "Post Budget New Tax Calculation as per 2025";
+                        highlightClass = "new";
+                        warningMessage = "Shown tax includes 4 percent CESS";
+                        break;
+                }
+
+                resultsHTML += `
+                    <div>
+                        <h2 class="sub-title">${regimeTitle}</h2>
+                        <div class="result-box-${highlightClass}">${formatCurrency(taxWithCess)}</div>
+                        <p class="highlight-${highlightClass}">Effective Rate: ${effectiveRate.toFixed(1)}%<br>In-Hand Per Month Salary: ${inHandSalary}</p>
+                        <p style="color: ${highlightClass === 'pre-old' ? 'orange' : highlightClass === 'pre-new' ? 'lightblue' : 'lightgreen'};">${warningMessage}</p>
+                    </div>
+                `;
+            }
+
+            // Savings calculations
+            const preBudgetNewTax = calculateTaxAmount(salary, regimes.pre_budget_new) * 1.04;
+            const postBudgetNewTax = calculateTaxAmount(salary, regimes.post_budget_new) * 1.04;
+            const savingsNew = preBudgetNewTax - postBudgetNewTax;
+
+            const preBudgetOldTax = calculateTaxAmount(salary, regimes.pre_budget_old) * 1.04;
+            const savingsOld = preBudgetOldTax - postBudgetNewTax;
+
+            resultsHTML += `
+            <div class="savings-info">
+                <p class="highlight-new">Total Savings if you were in New Regime before Budget: ${formatCurrency(savingsNew)}</p>
+                <p class="highlight-pre-old">Total Savings if you were in Old Regime before Budget: ${formatCurrency(savingsOld)}</p>
+                <p style="color: red;">Amounts mentioned are subject to change based on additional investments or loans</p>
+            </div>
+            `;
+
+            resultsDiv.innerHTML = resultsHTML; // Set the accumulated HTML
+
+        }
+    </script>
+
+</body>
+</html>
